@@ -89,8 +89,8 @@ def main():
     # diskID,Active_Disk, Media_ref, Description,Checksum,Location_ID , Group_ID, part_number, Version_number, Field_1, Field_2
     with conn:
         #Create Disk
-        #theDisc = Prepare_Disk()
-        #lastrow = CreateDisk(conn, theDisc)
+        theDisc = Prepare_Disk(conn)
+        lastrow = CreateDisk(conn, theDisc)
 
         #Create Person
         #thePerson = PreparePersons()
@@ -104,6 +104,7 @@ def main():
         #theLocation = PrepareLocations()
         #createLocation(conn, theLocation)
 
+
         #creataABorrow(conn,prepareAborrow())
 
         #return the book
@@ -114,8 +115,53 @@ def main():
         #mediaUpdate =  (2,True,"05445", "UpdatedDescription","1111111!",3,1,"Part Number Changed"," version 2.2", "F1.1","F1.2",2)
         #UpdateMedia(conn,mediaUpdate)
 
-        deActivatePerson(conn,1)
+        #deActivatePerson(conn,1)
 
+        #Find_Disk_On_ID(conn,2)
+
+        #Find_all_Borrows(conn)
+
+        #Find_Disk_On_MediaRef(conn, "0500" )
+        #print (PullNextMediaRef(conn))
+
+def Find_Disk_On_ID(conn,ID):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM disks WHERE Disk_ID=?", (ID,))
+    rows = cur.fetchall()
+    return rows
+
+def Find_Disk_On_MediaRef(conn,MediaRef):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM disks WHERE Media_ref=?", (MediaRef,))
+    rows = cur.fetchall()
+    print (rows)
+    return rows
+
+def PullNextMediaRef(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT Media_ref FROM disks")
+    rows = cur.fetchall()
+    temp = []
+    for r in rows:
+        tempvalue = int(r[0])
+        temp.append(tempvalue)
+    return str(max(temp)+1)
+
+def Find_all_Borrows(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT Aborrows.Engineer_ID,"
+                " Aborrows.Date_Taken,"
+                " Aborrows.Date_Returned, "
+                "Persons.Person_ID,"
+                "Persons.Person_Name,"
+                "disks.Media_ref,"
+                "disks.Description  "
+                "FROM ((Aborrows "
+                "Inner Join Persons ON Aborrows.Engineer_ID = Persons.Person_ID)"
+                "Inner Join disks ON disks.Disk_ID = Aborrows.Media_ID) "
+                "")
+    rows = cur.fetchall()
+    return  rows
 
 def PrepareGroups():
     #ID integer, GroupName  text, MasterGroups integer, hasSubGroup Boolean
@@ -143,14 +189,14 @@ def PreparePersons():
     person = (Active, Person_ID, Person_Name)
     return person
 
-def Prepare_Disk():
+def Prepare_Disk(conn):
     diskID= None
     Active_Disk= True
-    Media_ref = "0507"
+    Media_ref = PullNextMediaRef(conn)
     Description ="Second disk attempt"
     Checksum = "000000"
-    Location_ID ="1"
-    Group_ID ="1"
+    Location_ID ="2"
+    Group_ID ="2"
     part_number = "PN"
     Version_number = "Version"
     Field_1 ="f1"
@@ -189,11 +235,11 @@ def createLocation(conn,location):
 def prepareAborrow():
     # Borrow_ID  integer    PRIMARY KEY, Engineer_ID integer, Media_ID integer, Date_Taken date, Date_Returned date,
     Borrow_ID = None
-    Engineer_ID = 0
-    Media_ID = 0
+    Engineer_ID = 1
+    Media_ID = 4
     #YY-MM-DD
     Date_Taken = "2020-01-31"
-    Date_Returned = "2020-02-31"
+    Date_Returned = ""
 
     aB = (Borrow_ID,Engineer_ID,Media_ID,Date_Taken,Date_Returned)
     return aB
