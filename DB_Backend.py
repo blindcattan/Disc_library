@@ -1,4 +1,4 @@
-import sqlite3, interface
+import sqlite3
 from datetime import date
 from sqlite3 import Error
 
@@ -166,8 +166,8 @@ def Prepare_Disk(conn):
     diskID= None
     Active_Disk= True
     Media_ref = PullNextMediaRef(conn)
-    Description ="Second disk attempt"
-    Checksum = "000000"
+    Description ="third  disk attempt"
+    Checksum = "002000"
     Location_ID ="2"
     Group_ID ="2"
     part_number = "PN"
@@ -293,3 +293,45 @@ def SetupConnection():
     conn = create_connection(database)
     createtable(conn)
     return conn
+
+def returnGroupNames(conn):
+    sql = '''SELECT GroupName 
+            FROM Groups  '''
+    cur =conn.cursor()
+    cur.execute(sql)
+    rows = cur.fetchall()
+    #print(rows)
+    return rows
+
+def returnLocationNames(conn):
+    sql = '''SELECT theLocation 
+            FROM Locations  '''
+    cur =conn.cursor()
+    cur.execute(sql)
+    rows = cur.fetchall()
+    #print(rows)
+    return rows
+
+def SearchMedia(conn, searchterms):
+    print (searchterms)
+    cur = conn.cursor()
+    sql = ("SELECT DISKS.Active_Disk, "
+                "DISKS.Media_ref, "
+                "DISKS.Description, "
+                "DISKS.Checksum, "
+                "Locations.theLocation, "
+                "Groups.GroupName, "
+                "DISKS.part_number, "
+                "DISKS.Version_Number "
+                "FROM ((DISKS "
+                "Inner Join Locations ON Disks.Location_ID = Locations.ID)"
+                "Inner Join Groups ON disks.Group_ID = Groups.ID) "
+                "WHERE DISKS.Media_ref LIKE ? "
+                "AND DISKS.Description LIKE ? "
+                "AND Groups.GroupName LIKE ? "
+                "AND Locations.theLocation LIKE ? "
+                "")
+    cur.execute(sql,searchterms)
+    searchterms
+    rows = cur.fetchall()
+    return rows

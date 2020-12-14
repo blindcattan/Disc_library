@@ -12,8 +12,8 @@ def main():
     # diskID,Active_Disk, Media_ref, Description,Checksum,Location_ID , Group_ID, part_number, Version_number, Field_1, Field_2
     with conn:
         #Create Disk
-        #theDisc = Prepare_Disk(conn)
-        #lastrow = CreateDisk(conn, theDisc)
+        theDisc = DB_Backend.Prepare_Disk(conn)
+        lastrow = DB_Backend.CreateDisk(conn, theDisc)
 
         #Create Person
         #thePerson = PreparePersons()
@@ -47,7 +47,6 @@ def main():
         #Find_Disk_On_MediaRef(conn, "0500" )
         #print (PullNextMediaRef(conn))
 
-        print( DB_Backend.LoadDiskData(conn))
         interface.startWindowLoop(conn)
 
 
