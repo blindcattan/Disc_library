@@ -46,7 +46,6 @@ def main():
 
         #Find_Disk_On_MediaRef(conn, "0500" )
         #print (PullNextMediaRef(conn))
-
         interface.startWindowLoop(conn)
 
 

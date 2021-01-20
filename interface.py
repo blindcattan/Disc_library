@@ -50,9 +50,12 @@ def startWindowLoop(conn):
     LabelLocation.config(width=8, height=1, text='Location')
 
     SearchButton = Button(Button_Frame,text='Search')
+    clearButton = Button(Button_Frame, text='Clear')
 
     #SearchButton.config(command=partial(searchButtonBtn, Text_Media,Text_Description,GroupCombo, ""))
     SearchButton.config(command=partial(searchButtonBtn,conn))
+    clearButton.config(command=partial(clearSearch, conn))
+
 
     #Pack button frame
     LabelMediaRef.pack(side=LEFT)
@@ -66,7 +69,7 @@ def startWindowLoop(conn):
     LocationCombo.pack(side=LEFT)
 
     SearchButton.pack(side=LEFT)
-
+    clearButton.pack(side=LEFT)
     #create Tree Frame
     tree_frame = Frame(root)
     tree_frame.pack()
@@ -85,7 +88,7 @@ def startWindowLoop(conn):
     Disk_ID     Active_Disk  Media_ref   Description         Checksum    Location_ID  Group_ID    part_number  Version_Number  Field_1     Field_2
     '''
     my_tree['columns'] = ("Active_Disk", "Media_ref", "Description", "Checksum", "Location","Group", "Part Number", "Version Number")
-    my_tree['height'] = 20
+    my_tree['height'] = 27
 
 
     my_tree.column("#0", width=1, minwidth=1)
@@ -128,19 +131,21 @@ def LoadTreeViewData(rows):
 
 def LoadGroups(conn):
     rows = DB_Backend.returnGroupNames(conn)
-    print(rows)
+    #aa     print(rows)
     cache = []
     for r in rows:
         print (r[0])
         cache.append(r[0])
     GroupCombo['values'] = cache
+    #tobys 66ufi6ur6st line of 7tcoyde`333333333333333333333333333333314rqerc         3s
+    #.jhkk("hi`")
 
 def LoadLocations(conn):
     rows = DB_Backend.returnLocationNames(conn)
-    print(rows)
+    #print(rows)
     cache = []
     for r in rows:
-        print (r[0])
+        #print (r[0])
         cache.append(r[0])
     LocationCombo['values'] = cache
 
@@ -151,7 +156,7 @@ def searchButtonBtn(conn):
     description = Text_Description.get(1.0,"end-1c")
     Group = GroupCombo.get()
     location = ""
-    print("media ID: ", MediaID, "Description", description, "GROUP ", Group)
+    #print("media ID: ", MediaID, "Description", description, "GROUP ", Group)
 
 
     #clear the empty bits
@@ -184,6 +189,15 @@ def searchButtonBtn(conn):
     LoadTreeViewData(rows)
 
 
+def clearSearch(conn):
+    #clear search fields
+    GroupCombo.set('')
+    Text_Description.delete(1.0,END)
+    LocationCombo.set('')
+    Text_Media.delete(1.0,END)
+
+    #perform search
+    searchButtonBtn(conn)
 
 
 

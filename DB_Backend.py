@@ -88,7 +88,7 @@ def Find_Disk_On_MediaRef(conn,MediaRef):
     cur = conn.cursor()
     cur.execute("SELECT * FROM disks WHERE Media_ref=?", (MediaRef,))
     rows = cur.fetchall()
-    print (rows)
+    #print (rows)
     return rows
 
 def PullNextMediaRef(conn):
@@ -313,7 +313,7 @@ def returnLocationNames(conn):
     return rows
 
 def SearchMedia(conn, searchterms):
-    print (searchterms)
+    #print (searchterms)
     cur = conn.cursor()
     sql = ("SELECT DISKS.Active_Disk, "
                 "DISKS.Media_ref, "
