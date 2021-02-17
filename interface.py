@@ -1,4 +1,4 @@
-#First version
+#Updated version 16/02/21
 from tkinter import *
 from tkinter import ttk
 from functools import partial
@@ -7,8 +7,32 @@ import DB_Backend
 
 
 root = Tk()
+my_menu = Menu(root)
 Button_Frame = Frame (root)
 Text_Media = Text(Button_Frame)
+
+#create menu
+root.config(menu=my_menu)
+
+def NewMedia():
+    pass
+
+def BorrowedBooks():
+    pass
+
+
+file_menu = Menu(my_menu)
+report_menu = Menu(my_menu)
+my_menu.add_cascade(label="File",menu=file_menu)
+my_menu.add_cascade(label="Reports",menu=report_menu)
+
+file_menu.add_command(label="New Media", command=NewMedia)
+file_menu.add_command(label="Quit",command=root.quit)
+
+report_menu.add_command(label="Borrowed Books",command=BorrowedBooks)
+
+
+
 
 def startWindowLoop(conn):
     global my_tree
@@ -76,7 +100,7 @@ def startWindowLoop(conn):
     #cretae a tree
     #create tree view scroll bar
     tree_scroll = Scrollbar(tree_frame)
-    tree_scroll.pack(side=RIGHT, fill=Y)
+    tree_scroll.pack(side=RIGHT, fill=BOTH  )
     my_tree = ttk.Treeview(tree_frame, yscrollcommand=tree_scroll.set, selectmode="browse" )
     my_tree.pack()
     # configure scrollbar
@@ -127,7 +151,7 @@ def LoadTreeViewData(rows):
     for r in rows:
         my_tree.insert(parent='', index='end', iid=count, values=(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7]))
         count = count + 1
-    my_tree.pack(pady=20)
+    my_tree.pack()
 
 def LoadGroups(conn):
     rows = DB_Backend.returnGroupNames(conn)
